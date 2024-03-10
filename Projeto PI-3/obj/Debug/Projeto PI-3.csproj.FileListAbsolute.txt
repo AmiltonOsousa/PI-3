@@ -1,0 +1,15 @@
+C:\Users\amilt\source\repos\Projeto PI-3\Projeto PI-3\obj\Debug\Projeto PI-3.csproj.AssemblyReference.cache
+C:\Users\amilt\source\repos\Projeto PI-3\Projeto PI-3\obj\Debug\Projeto_PI_3.Properties.Resources.resources
+C:\Users\amilt\source\repos\Projeto PI-3\Projeto PI-3\obj\Debug\Projeto PI-3.csproj.GenerateResource.cache
+C:\Users\amilt\source\repos\Projeto PI-3\Projeto PI-3\obj\Debug\Projeto PI-3.csproj.CoreCompileInputs.cache
+C:\Users\amilt\source\repos\Projeto PI-3\Projeto PI-3\bin\Debug\Projeto PI-3.exe.config
+C:\Users\amilt\source\repos\Projeto PI-3\Projeto PI-3\bin\Debug\Projeto PI-3.exe
+C:\Users\amilt\source\repos\Projeto PI-3\Projeto PI-3\bin\Debug\Projeto PI-3.pdb
+C:\Users\amilt\source\repos\Projeto PI-3\Projeto PI-3\bin\Debug\MagicTrickServer.dll
+C:\Users\amilt\source\repos\Projeto PI-3\Projeto PI-3\bin\Debug\MagicTrickServer.xml
+C:\Users\amilt\source\repos\Projeto PI-3\Projeto PI-3\obj\Debug\Projeto PI-3.csproj.CopyComplete
+C:\Users\amilt\source\repos\Projeto PI-3\Projeto PI-3\obj\Debug\Projeto PI-3.exe
+C:\Users\amilt\source\repos\Projeto PI-3\Projeto PI-3\obj\Debug\Projeto PI-3.pdb
+C:\Users\amilt\source\repos\Projeto PI-3\Projeto PI-3\obj\Debug\Projeto_PI_3.Home.resources
+C:\Users\amilt\source\repos\Projeto PI-3\Projeto PI-3\obj\Debug\Projeto_PI_3.CriarPartida.resources
+C:\Users\amilt\source\repos\Projeto PI-3\Projeto PI-3\obj\Debug\Projeto_PI_3.ListarPartida.resources
