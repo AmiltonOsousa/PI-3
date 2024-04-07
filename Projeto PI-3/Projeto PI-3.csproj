@@ -55,6 +55,12 @@
     <Compile Include="CriarPartida.Designer.cs">
       <DependentUpon>CriarPartida.cs</DependentUpon>
     </Compile>
+    <Compile Include="EmJogo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EmJogo.Designer.cs">
+      <DependentUpon>EmJogo.cs</DependentUpon>
+    </Compile>
     <Compile Include="ListarPartida.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -72,6 +78,9 @@
     <EmbeddedResource Include="CriarPartida.resx">
       <DependentUpon>CriarPartida.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="EmJogo.resx">
+      <DependentUpon>EmJogo.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ListarPartida.resx">
       <DependentUpon>ListarPartida.cs</DependentUpon>
     </EmbeddedResource>
@@ -86,6 +95,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -99,6 +109,30 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Cartas\Copas1.png" />
+    <Content Include="Cartas\Copas2.png" />
+    <Content Include="Cartas\Espadas1.png" />
+    <Content Include="Cartas\Espadas2.png" />
+    <Content Include="Cartas\Estrela1.png" />
+    <Content Include="Cartas\Estrela2.png" />
+    <Content Include="Cartas\Lua1.png" />
+    <Content Include="Cartas\Lua2.png" />
+    <Content Include="Cartas\Ouros1.png" />
+    <Content Include="Cartas\Ouros2.png" />
+    <Content Include="Cartas\Paus1.png" />
+    <Content Include="Cartas\Paus2.png" />
+    <Content Include="Cartas\Triângulo1.png" />
+    <Content Include="Cartas\Triângulo2.png" />
+    <None Include="Resources\Triângulo2.png" />
+    <None Include="Resources\Paus2.png" />
+    <None Include="Resources\Ouros2.png" />
+    <None Include="Resources\Lua2.png" />
+    <None Include="Resources\Estrela2.png" />
+    <None Include="Resources\Espadas2.png" />
+    <None Include="Resources\Copas2.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

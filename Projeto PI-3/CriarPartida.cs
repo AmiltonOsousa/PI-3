@@ -36,11 +36,18 @@ namespace Projeto_PI_3
                 MessageBox.Show("Erro: Partida sem nome", "Erro na criação da partida", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
+            else if (txtNomePartida.Text.Contains(','))
+            {
+                Erro(lblNomePartida);
+                MessageBox.Show("Erro: Partida contém \",\" no nome", "Erro na criação da partida", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
             else if (txtSenhaPartida.Text == "")
             {
                 Erro(lblSenhaPartida);
                 MessageBox.Show("Erro: Partida sem senha", "Erro na criação da partida", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
 
             else
             {

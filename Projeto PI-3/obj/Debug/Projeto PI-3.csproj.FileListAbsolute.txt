@@ -13,3 +13,4 @@ C:\Users\amilt\source\repos\Projeto PI-3\Projeto PI-3\obj\Debug\Projeto PI-3.pdb
 C:\Users\amilt\source\repos\Projeto PI-3\Projeto PI-3\obj\Debug\Projeto_PI_3.Home.resources
 C:\Users\amilt\source\repos\Projeto PI-3\Projeto PI-3\obj\Debug\Projeto_PI_3.CriarPartida.resources
 C:\Users\amilt\source\repos\Projeto PI-3\Projeto PI-3\obj\Debug\Projeto_PI_3.ListarPartida.resources
+C:\Users\amilt\source\repos\Projeto PI-3\Projeto PI-3\obj\Debug\Projeto_PI_3.EmJogo.resources
