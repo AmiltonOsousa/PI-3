@@ -123,6 +123,16 @@ namespace Projeto_PI_3.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap istockphoto_878053066_170667a {
+            get {
+                object obj = ResourceManager.GetObject("istockphoto-878053066-170667a", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Lua1 {
             get {
                 object obj = ResourceManager.GetObject("Lua1", resourceCulture);

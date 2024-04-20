@@ -126,6 +126,7 @@
     <Content Include="Cartas\Paus2.png" />
     <Content Include="Cartas\Triângulo1.png" />
     <Content Include="Cartas\Triângulo2.png" />
+    <None Include="Resources\istockphoto-878053066-170667a.jpg" />
     <None Include="Resources\Triângulo2.png" />
     <None Include="Resources\Paus2.png" />
     <None Include="Resources\Ouros2.png" />

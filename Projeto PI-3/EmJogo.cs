@@ -1,5 +1,5 @@
 ﻿using MagicTrickServer;
-using System; 
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -69,8 +69,11 @@ namespace Projeto_PI_3
         }
 
         public void JogarApostar(int posicao)
-        {
-            if (!cartaJogada)
+        { 
+            dados = dados.Replace("\r", "");
+            dados = dados.Replace("\n", "");
+
+            if(!cartaJogada)
             {
                 string retorno = Jogo.Jogar(idJogador, senha, posicao);
 
@@ -81,12 +84,12 @@ namespace Projeto_PI_3
 
                 else
                 {
-
                     lblTitulo.Text = "Carta jogada | Esperando a aposta...";
+                    lblCartaJogada.Text = "Carta Jogada: " + retorno;
+                    lblCartaValor.Text = retorno;
 
                     picCartaJogada.Image = Cartas[posicao - 1].Image;
 
-                    //Mudar o design da carta que foi jogada
                     switch (ListaNaipes[posicao - 1])
                     {
                         case "O":
@@ -133,8 +136,9 @@ namespace Projeto_PI_3
 
                 else
                 {
-
+                    lblAposta.Text = "Aposta feita: " + retorno;
                     lblTitulo.Text = "Carta jogada | Aposta feita";
+                    lblApostaValor.Text = retorno;
 
                     picCartaApostada.Image = Cartas[posicao - 1].Image;
 
@@ -174,30 +178,6 @@ namespace Projeto_PI_3
                 }
             }
         }
-
-        public void jogadorVez(int idPartida, int idSorteado)
-        {
-            string jogadores = Jogo.ListarJogadores(idPartida);
-
-            jogadores = jogadores.Replace("\r", "");
-            jogadores = jogadores.Substring(0, jogadores.Length - 1);
-
-            string[] jogador = jogadores.Split('\n');
-
-            for (int i = 0; i < jogador.Length; i++)
-            {
-                string[] dadosJogador = jogador[i].Split(',');
-
-                string idJogadorLista = dadosJogador[0];
-                string nomeJogadorLista = dadosJogador[1];
-
-                if (Convert.ToInt32(idJogadorLista) == idSorteado)
-                    lblNomeIdSorteado.Text = "Nome: " + nomeJogadorLista + "\nID: " + idJogadorLista;
-            }
-        }
-
-
-
         private void btnIniciarPartida_Click(object sender, EventArgs e)
         {
             string JogadorSorteado = Jogo.IniciarPartida(idJogador, senha);
@@ -208,31 +188,38 @@ namespace Projeto_PI_3
             btnIniciarPartida.Visible = false;
         }
 
+        public void jogadorVez(int idPartida, int idSorteado)
+        {
+            string jogadores = Jogo.ListarJogadores(idPartida);
+
+            jogadores = jogadores.Replace("\r", "");
+            jogadores = jogadores.Substring(0, jogadores.Length - 1);
+
+            string[] jogador = jogadores.Split('\n');
+
+            for(int i = 0; i < jogador.Length; i++)
+            {
+                string[] dadosJogador = jogador[i].Split(',');
+
+                string JogadorSorteado = idSorteado.ToString();
+                string idJogadorLista = dadosJogador[0];
+                string nomeJogadorLista = dadosJogador[1];
+
+                
+                if(idJogadorLista == JogadorSorteado)
+                    lblNomeIdSorteado.Text = "Nome: " + nomeJogadorLista + "\nID: " + idJogadorLista;
+            }
+        }
+
         public void btnVerificarVez_Click(object sender, EventArgs e)
         {
-            //Pegar dados que foram passados pelo form "ListarPartida"
-            string dados = dadoOriginal;
-            dados = dados.Replace("\r", "");
-            dados = dados.Replace("\n", "");
-
-            string[] dado = dados.Split(',');
-
-            int idJogador = Convert.ToInt32(dado[0]);
-            string senha = dado[1];
-            int idPartida = Convert.ToInt32(dado[2]);
-
-
             string retorno = Jogo.VerificarVez(idPartida);
             string[] dadosPartida = retorno.Split(',');
-
-            //infos - Status da Partida, Id do jogador da vez, numero da rodada e o status
-            //Status Partida - Aberta, Finalizada, Jogando
-            //Status - Aposta, C (hora da aposta) 
 
             string statusPartida = dadosPartida[0];
             string idJogadorVez = dadosPartida[1];
             int numeroRodada = Convert.ToInt32(dadosPartida[2]);
-            status = dadosPartida[3];
+            string status = dadosPartida[3];
 
             jogadorVez(idPartida, Convert.ToInt32(idJogadorVez));
         }
@@ -301,19 +288,7 @@ namespace Projeto_PI_3
 
         private void btnJogar_Click(object sender, EventArgs e)
         {
-            string dados = dadoOriginal;
-            dados = dados.Replace("\r", "");
-            dados = dados.Replace("\n", "");
-
-            string[] dado = dados.Split(',');
-
-            int idJogador = Convert.ToInt32(dado[0]);
-            string senha = dado[1];
-            int idPartida = Convert.ToInt32(dado[2]);
-
-            string retorno;
-
-            retorno = Jogo.Jogar(idJogador, senha, 1);
+            string retorno = Jogo.Jogar(idJogador, senha, 1);
 
             if (retorno.Substring(0, 1) == "E")
             {
@@ -329,75 +304,90 @@ namespace Projeto_PI_3
 
         private void btnApostar_Click(object sender, EventArgs e)
         {
-            string dados = dadoOriginal;
-            dados = dados.Replace("\r", "");
-            dados = dados.Replace("\n", "");
+            string retorno = Jogo.Apostar(idJogador, senha, 0);
 
-            string[] dado = dados.Split(',');
+            if (retorno.Substring(0, 1) == "E")
+            {
+                MessageBox.Show("Ocorreu um erro:\n" + retorno.Substring(5), "Meu PI-3", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
 
-            int idJogador = Convert.ToInt32(dado[0]);
-            string senha = dado[1];
-            int idPartida = Convert.ToInt32(dado[2]);
+            else
+            {
+                lblTitulo.Text = "Carta jogada | Aposta feita";
+                lblAposta.Text = "Carta apostada: " + retorno;
+            }
         }
-
         private void picCarta1_DoubleClick(object sender, EventArgs e)
         {
             JogarApostar(1);
         }
 
-        private void picCarta2_Click(object sender, EventArgs e)
+
+        private void picCarta2_DoubleClick(object sender, EventArgs e)
         {
             JogarApostar(2);
         }
 
-        private void picCarta3_Click(object sender, EventArgs e)
+        private void picCarta3_DoubleClick(object sender, EventArgs e)
         {
             JogarApostar(3);
         }
 
-        private void picCarta4_Click(object sender, EventArgs e)
+
+        private void picCarta4_DoubleClick(object sender, EventArgs e)
         {
             JogarApostar(4);
         }
 
-        private void picCarta5_Click(object sender, EventArgs e)
+
+        private void picCarta5_DoubleClick(object sender, EventArgs e)
         {
             JogarApostar(5);
         }
 
-        private void picCarta6_Click(object sender, EventArgs e)
+
+        private void picCarta6_DoubleClick(object sender, EventArgs e)
         {
             JogarApostar(6);
         }
 
-        private void picCarta7_Click(object sender, EventArgs e)
+
+        private void picCarta7_DoubleClick(object sender, EventArgs e)
         {
             JogarApostar(7);
         }
 
-        private void picCarta8_Click(object sender, EventArgs e)
+
+        private void picCarta8_DoubleClick(object sender, EventArgs e)
         {
             JogarApostar(8);
         }
-
-        private void picCarta9_Click(object sender, EventArgs e)
+        private void picCarta9_DoubleClick(object sender, EventArgs e)
         {
             JogarApostar(9);
         }
 
-        private void picCarta10_Click(object sender, EventArgs e)
+        private void picCarta10_DoubleClick(object sender, EventArgs e)
         {
             JogarApostar(10);
-        }  
+        }
 
-        private void picCarta11_Click(object sender, EventArgs e)
+        private void picCarta11_DoubleClick(object sender, EventArgs e)
         {
             JogarApostar(11);
         }
 
-        private void picCarta12_Click(object sender, EventArgs e)
+        private void picCarta12_DoubleClick(object sender, EventArgs e)
         {
             JogarApostar(12);
+        }
+
+        private void picCoringa_DoubleClick(object sender, EventArgs e)
+        {
+            Jogo.Apostar(idJogador, senha, 0);
+            picCartaApostada.Image = Properties.Resources.istockphoto_878053066_170667a;
+
+            lblApostaValor.Text = "0";
         }
     }
 }
