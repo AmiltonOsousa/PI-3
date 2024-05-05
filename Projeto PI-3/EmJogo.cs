@@ -13,26 +13,34 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Projeto_PI_3
 {
-
     public partial class EmJogo : Form
     {
         //Variáveis para pegar dado de outro form
         public string dadosRetorno { get; set; }
-        public string dadoOriginal, status;
-
-        public string dados, senha;
-        public string[] dado;
+        public string dadoOriginal, status, dados, senha;
+        public string[] dado, minhasCartas;
 
         public int idJogador, idPartida;
 
-        //Variável para mostrar as cartas graficamente
-        public PictureBox[] Cartas = new PictureBox[12];
-
         //Variável para saber se a carta selecionada é a jogada ou apostada
         public bool cartaJogada = false;
-
+        //Variável para mostrar as cartas graficamente
+        public PictureBox[] CartasImagens = new PictureBox[12];
         //Lista que será usada para armazenar os naipes
         public List<string> ListaNaipes = new List<string>();
+        //Array para mostrar CartasImagens disponíveis e indisponíveis
+        public bool[] Cartas = new bool[12];
+        //Matriz com todas as cartas
+        public int[,] TodasCartas = new int[3, 8];
+
+        //-----------Variáveis para o jogo----------------
+        public int[] valoresMao = new int[12];
+        public int vitorias = 0;
+        public int numCarta, numRound, posicao;
+        public bool apostaEncontrada = false;
+        public bool acumularPontos = true;
+        public bool apostou = false;
+
 
         public void AtualizarTela()
         {
@@ -53,185 +61,61 @@ namespace Projeto_PI_3
         {
             InitializeComponent();
 
-            //Inicialize o array com as cartas gráficas
-            Cartas[0] = picCarta1;
-            Cartas[1] = picCarta2;
-            Cartas[2] = picCarta3;
-            Cartas[3] = picCarta4;
-            Cartas[4] = picCarta5;
-            Cartas[5] = picCarta6;
-            Cartas[6] = picCarta7;
-            Cartas[7] = picCarta8;
-            Cartas[8] = picCarta9;
-            Cartas[9] = picCarta10;
-            Cartas[10] = picCarta11;
-            Cartas[11] = picCarta12;
-        }
-
-        public void JogarApostar(int posicao)
-        { 
-            dados = dados.Replace("\r", "");
-            dados = dados.Replace("\n", "");
-
-            if(!cartaJogada)
+            //Inicialize o array com as CartasImagens gráficas
+            for (int i = 0; i < 12; i++)
             {
-                string retorno = Jogo.Jogar(idJogador, senha, posicao);
-
-                if (retorno.Substring(0, 1) == "E")
-                {
-                    MessageBox.Show("Ocorreu um erro:\n" + retorno.Substring(5), "Meu PI-3", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                }
-
-                else
-                {
-                    lblTitulo.Text = "Carta jogada | Esperando a aposta...";
-                    lblCartaJogada.Text = "Carta Jogada: " + retorno;
-                    lblCartaValor.Text = retorno;
-
-                    picCartaJogada.Image = Cartas[posicao - 1].Image;
-
-                    switch (ListaNaipes[posicao - 1])
-                    {
-                        case "O":
-                            Cartas[posicao - 1].Image = Properties.Resources.Ouros2;
-                            break;
-
-                        case "C":
-                            Cartas[posicao - 1].Image = Properties.Resources.Copas2;
-                            break;
-
-                        case "E":
-                            Cartas[posicao - 1].Image = Properties.Resources.Espadas2;
-                            break;
-
-                        case "S":
-                            Cartas[posicao - 1].Image = Properties.Resources.Estrela2;
-                            break;
-
-                        case "P":
-                            Cartas[posicao - 1].Image = Properties.Resources.Paus2;
-                            break;
-
-                        case "L":
-                            Cartas[posicao - 1].Image = Properties.Resources.Lua2;
-                            break;
-
-                        case "T":
-                            Cartas[posicao - 1].Image = Properties.Resources.Triângulo2;
-                            break;
-                    }
-
-                    cartaJogada = true;
-                }
+                Cartas[i] = true;
             }
 
-            else
-            {
-                string retorno = Jogo.Apostar(idJogador, senha, posicao);
-
-                if (retorno.Substring(0, 1) == "E")
-                {
-                    MessageBox.Show("Ocorreu um erro:\n" + retorno.Substring(5), "Meu PI-3", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                }
-
-                else
-                {
-                    lblAposta.Text = "Aposta feita: " + retorno;
-                    lblTitulo.Text = "Carta jogada | Aposta feita";
-                    lblApostaValor.Text = retorno;
-
-                    picCartaApostada.Image = Cartas[posicao - 1].Image;
-
-                    //Mudar o design da carta que foi jogada
-                    switch (ListaNaipes[posicao - 1])
-                    {
-                        case "O":
-                            Cartas[posicao - 1].Image = Properties.Resources.Ouros2;
-                            break;
-
-                        case "C":
-                            Cartas[posicao - 1].Image = Properties.Resources.Copas2;
-                            break;
-
-                        case "E":
-                            Cartas[posicao - 1].Image = Properties.Resources.Espadas2;
-                            break;
-
-                        case "S":
-                            Cartas[posicao - 1].Image = Properties.Resources.Estrela2;
-                            break;
-
-                        case "P":
-                            Cartas[posicao - 1].Image = Properties.Resources.Paus2;
-                            break;
-
-                        case "L":
-                            Cartas[posicao - 1].Image = Properties.Resources.Lua2;
-                            break;
-
-                        case "T":
-                            Cartas[posicao - 1].Image = Properties.Resources.Triângulo2;
-                            break;
-                    }
-
-                    cartaJogada = false;
-                }
-            }
+            CartasImagens[0] = picCarta1;
+            CartasImagens[1] = picCarta2;
+            CartasImagens[2] = picCarta3;
+            CartasImagens[3] = picCarta4;
+            CartasImagens[4] = picCarta5;
+            CartasImagens[5] = picCarta6;
+            CartasImagens[6] = picCarta7;
+            CartasImagens[7] = picCarta8;
+            CartasImagens[8] = picCarta9;
+            CartasImagens[9] = picCarta10;
+            CartasImagens[10] = picCarta11;
+            CartasImagens[11] = picCarta12;
         }
         private void btnIniciarPartida_Click(object sender, EventArgs e)
         {
-            string JogadorSorteado = Jogo.IniciarPartida(idJogador, senha);
-
-            jogadorVez(idPartida, Convert.ToInt32(JogadorSorteado));
-
+            Jogo.IniciarPartida(idJogador, senha);
+            VerMao();
             btnIniciarPartida.Enabled = false;
-            btnIniciarPartida.Visible = false;
         }
 
-        public void jogadorVez(int idPartida, int idSorteado)
-        {
-            string jogadores = Jogo.ListarJogadores(idPartida);
-
-            jogadores = jogadores.Replace("\r", "");
-            jogadores = jogadores.Substring(0, jogadores.Length - 1);
-
-            string[] jogador = jogadores.Split('\n');
-
-            for(int i = 0; i < jogador.Length; i++)
-            {
-                string[] dadosJogador = jogador[i].Split(',');
-
-                string JogadorSorteado = idSorteado.ToString();
-                string idJogadorLista = dadosJogador[0];
-                string nomeJogadorLista = dadosJogador[1];
-
-                
-                if(idJogadorLista == JogadorSorteado)
-                    lblNomeIdSorteado.Text = "Nome: " + nomeJogadorLista + "\nID: " + idJogadorLista;
-            }
-        }
-
-        public void btnVerificarVez_Click(object sender, EventArgs e)
+        public bool VerificarVez()
         {
             string retorno = Jogo.VerificarVez(idPartida);
             string[] dadosPartida = retorno.Split(',');
 
             string statusPartida = dadosPartida[0];
             string idJogadorVez = dadosPartida[1];
-            int numeroRodada = Convert.ToInt32(dadosPartida[2]);
+            int numRodadas = Convert.ToInt32(dadosPartida[2]);
             string status = dadosPartida[3];
 
-            jogadorVez(idPartida, Convert.ToInt32(idJogadorVez));
+            //Verificar se é hora de jogar ou não
+            if (idJogador == Convert.ToInt32(idJogadorVez))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
-        private void btnVerificarMao_Click(object sender, EventArgs e)
+        public void VerMao()
         {
             string retorno = Jogo.ConsultarMao(idPartida);
 
             retorno = retorno.Replace("\r", "");
 
             //Separar as cartas do retorno por linha e colocar na lista
-            string[] ConsultarMao = retorno.Split('\n');   
+            string[] ConsultarMao = retorno.Split('\n');
 
             for (int i = 0; i < ConsultarMao.Length - 1; i++)
             {
@@ -249,62 +133,107 @@ namespace Projeto_PI_3
                     ListaNaipes.Add(naipe);
                 }
             }
-              
+
             //MOSTRAR AS IMAGENS DAS CARTAS DO JOGADOR
             for (int i = 0; i < ListaNaipes.Count; i++)
             {
                 switch (ListaNaipes[i])
                 {
                     case "O":
-                        Cartas[i].Image = Properties.Resources.Ouros1;
+                        CartasImagens[i].Image = Properties.Resources.Ouros1;
                         break;
-                    
+
                     case "C":
-                        Cartas[i].Image = Properties.Resources.Copas1;
+                        CartasImagens[i].Image = Properties.Resources.Copas1;
                         break;
 
                     case "E":
-                        Cartas[i].Image = Properties.Resources.Espadas1;
+                        CartasImagens[i].Image = Properties.Resources.Espadas1;
                         break;
 
                     case "S":
-                        Cartas[i].Image = Properties.Resources.Estrela1;
+                        CartasImagens[i].Image = Properties.Resources.Estrela1;
                         break;
 
                     case "P":
-                        Cartas[i].Image = Properties.Resources.Paus1;
+                        CartasImagens[i].Image = Properties.Resources.Paus1;
                         break;
 
                     case "L":
-                        Cartas[i].Image = Properties.Resources.Lua1;
+                        CartasImagens[i].Image = Properties.Resources.Lua1;
                         break;
 
                     case "T":
-                        Cartas[i].Image = Properties.Resources.Triângulo1;
-                        break;                 
+                        CartasImagens[i].Image = Properties.Resources.Triângulo1;
+                        break;
                 }
-            }     
+            }
         }
 
-        private void btnJogar_Click(object sender, EventArgs e)
+        public void MudarDesignCarta(int posicao)
         {
-            string retorno = Jogo.Jogar(idJogador, senha, 1);
+            switch (ListaNaipes[posicao - 1])
+            {
+                case "O":
+                    CartasImagens[posicao - 1].Image = Properties.Resources.Ouros2;
+                    break;
+
+                case "C":
+                    CartasImagens[posicao - 1].Image = Properties.Resources.Copas2;
+                    break;
+
+                case "E":
+                    CartasImagens[posicao - 1].Image = Properties.Resources.Espadas2;
+                    break;
+
+                case "S":
+                    CartasImagens[posicao - 1].Image = Properties.Resources.Estrela2;
+                    break;
+
+                case "P":
+                    CartasImagens[posicao - 1].Image = Properties.Resources.Paus2;
+                    break;
+
+                case "L":
+                    CartasImagens[posicao - 1].Image = Properties.Resources.Lua2;
+                    break;
+
+                case "T":
+                    CartasImagens[posicao - 1].Image = Properties.Resources.Triângulo2;
+                    break;
+            }
+        }
+
+        public string JogarCarta(int posicao)
+        {
+            string retorno = Jogo.Jogar(idJogador, senha, posicao);
 
             if (retorno.Substring(0, 1) == "E")
             {
                 MessageBox.Show("Ocorreu um erro:\n" + retorno.Substring(5), "Meu PI-3", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return "";
             }
 
             else
             {
-                lblTitulo.Text = "Carta jogada | Esperando aposta...";
+                lblTitulo.Text = "Carta jogada | Esperando a aposta...";
                 lblCartaJogada.Text = "Carta Jogada: " + retorno;
+
+                lblCartaValor.Text = retorno;
+                lblCartaValor.BackColor = Color.Transparent;
+
+                picCartaJogada.Image = CartasImagens[posicao - 1].Image;
+
+                //Mudar o design da carta que foi jogada
+                MudarDesignCarta(posicao);
+
+                return retorno;
             }
         }
 
-        private void btnApostar_Click(object sender, EventArgs e)
+        public void ApostarCarta(int posicao)
         {
-            string retorno = Jogo.Apostar(idJogador, senha, 0);
+            string retorno = Jogo.Apostar(idJogador, senha, posicao);
 
             if (retorno.Substring(0, 1) == "E")
             {
@@ -313,81 +242,206 @@ namespace Projeto_PI_3
 
             else
             {
+                lblAposta.Text = "Aposta feita: " + retorno;
                 lblTitulo.Text = "Carta jogada | Aposta feita";
-                lblAposta.Text = "Carta apostada: " + retorno;
+                lblApostaValor.Text = retorno;
+
+                if (posicao == 0)
+                {
+                    picCartaApostada.Image = Properties.Resources.istockphoto_878053066_170667a;
+                }
+                else
+                {
+                    MudarDesignCarta(posicao);
+                    picCartaApostada.Image = CartasImagens[posicao - 1].Image;
+                }
+                cartaJogada = false;
             }
         }
-        private void picCarta1_DoubleClick(object sender, EventArgs e)
+
+        //----------------------Métodos Auxiliares---------------------\\
+
+        private void AlgAposta(int numCarta, int vitoria, int posicao)
         {
-            JogarApostar(1);
+            if(numRound >= 5)
+            {
+                if(numCarta - vitoria == 0)
+                {
+                    if (Cartas[posicao + 1] == true)
+                    {
+                        ApostarCarta(posicao + 2);
+                    }
+                    else if (Cartas[posicao + 1] == true)
+                    {
+                        ApostarCarta(posicao);
+                    }
+                }
+            }
+            ApostarCarta(0);
+        }
+
+        public void MaiorCarta(string naipe)
+        {
+            for (int i = ListaNaipes.Count - 1; i >= 0; i--)
+            {
+                if (ListaNaipes[i] == naipe && Cartas[i] == true)
+                {
+                    int numCarta = Convert.ToInt32(JogarCarta(i + 1));
+                    Cartas[i] = false;
+
+                    break;
+                }
+
+            }
+        }
+
+        //--------------------------Estratégias---------------------------\\
+
+        private void EstTeste(string retornoJogadas)
+        {
+            //Verificar se é o primeiro a jogar ou não
+            if (retornoJogadas == "")
+            {
+                if (numRound > 1)
+                    vitorias++;
+
+                for (int i = Cartas.Length - 1; i >= 0; i--)
+                {
+                    //Confere se a carta está disponível
+                    if (Cartas[i] == true)
+                    {
+                        numCarta = Convert.ToInt32(JogarCarta(i + 1));
+                        Cartas[i] = false;
+                        posicao = i;
+
+                        break;
+                    }
+                }
+
+                AlgAposta(numCarta, vitorias, posicao);
+            }
+            else
+            {
+                retornoJogadas = retornoJogadas.Replace("\r", "");
+                string[] jogadas = retornoJogadas.Split('\n');
+
+                //Achar as informações da última jogada
+                int size = jogadas.Length - 1;
+                string ultimaJogada = jogadas[size - 1];
+
+                string[] infos = ultimaJogada.Split(',');
+                numRound = Convert.ToInt32(infos[0]);
+                string naipe = infos[2];
+
+                if (vitorias < 3)
+                {
+                    MaiorCarta(naipe);
+                }
+                else
+                {
+                    for (int i = 0; i < ListaNaipes.Count; i++)
+                    {
+                        
+                       if (ListaNaipes[i] == naipe && Cartas[i] == true)
+                       {
+                           int numCarta = Convert.ToInt32(JogarCarta(i + 1));
+                           Cartas[i] = false;
+                       
+                           break;
+                       }
+                        
+                    }
+                }
+                ApostarCarta(0);
+            }
         }
 
 
-        private void picCarta2_DoubleClick(object sender, EventArgs e)
+
+        /*
+        private void Estrategia(string retornoJogadas)
         {
-            JogarApostar(2);
+        
+            if(retornoJogadas == "" && acumularPontos)
+            {
+                vitorias++;
+
+                for (int i = Cartas.Length - 1; i >= 0; i--)
+                {
+                    //Confere se a carta está disponível
+                    if (Cartas[i] == true)
+                    {
+                        int valorCarta = Convert.ToInt32(JogarCarta(i + 1));
+                        valoresMao[i] = valorCarta;
+                        Cartas[i] = false;
+
+                        break;
+                    }
+                }
+
+                ApostarCarta(0);
+            }
+            else
+            {
+                acumularPontos = false;
+
+                for (int i = 0; i < Cartas.Length; i++)
+                {
+                    //Confere se a carta está disponível
+                    if (Cartas[i] == true)
+                    {
+                        int valorCarta = Convert.ToInt32(JogarCarta(i + 1));
+                        valoresMao[i] = valorCarta;
+                        Cartas[i] = false;
+
+                        if(valorCarta == vitorias && !apostou)
+                        {
+                            if (Cartas[i] == true)
+                            {
+                                ApostarCarta(i);
+                            }
+                            else if (Cartas[i + 2] == true)
+                            {
+                                ApostarCarta(i + 2);
+                            }
+                        }
+                        else
+                        {
+                            ApostarCarta(0);
+                        }
+
+                        break;
+                    }
+                }
+            }
+        }
+        */
+
+
+        //--------------------------------------------------------------\\
+
+        //Automação
+
+        private void btnAutomacao_Click(object sender, EventArgs e)
+        
+        {
+            btnAutomacao.Enabled = false;
+            tmrAutomacao.Enabled = true;
         }
 
-        private void picCarta3_DoubleClick(object sender, EventArgs e)
+        private void tmrAutomacao_Tick(object sender, EventArgs e)
         {
-            JogarApostar(3);
-        }
+            tmrAutomacao.Enabled = false;
 
+            bool seuTurno = VerificarVez();
+            string retornoJogadas = Jogo.ExibirJogadas2(idPartida);
 
-        private void picCarta4_DoubleClick(object sender, EventArgs e)
-        {
-            JogarApostar(4);
-        }
+            if (seuTurno)
+            {
+                EstTeste(retornoJogadas);
+            }
 
-
-        private void picCarta5_DoubleClick(object sender, EventArgs e)
-        {
-            JogarApostar(5);
-        }
-
-
-        private void picCarta6_DoubleClick(object sender, EventArgs e)
-        {
-            JogarApostar(6);
-        }
-
-
-        private void picCarta7_DoubleClick(object sender, EventArgs e)
-        {
-            JogarApostar(7);
-        }
-
-
-        private void picCarta8_DoubleClick(object sender, EventArgs e)
-        {
-            JogarApostar(8);
-        }
-        private void picCarta9_DoubleClick(object sender, EventArgs e)
-        {
-            JogarApostar(9);
-        }
-
-        private void picCarta10_DoubleClick(object sender, EventArgs e)
-        {
-            JogarApostar(10);
-        }
-
-        private void picCarta11_DoubleClick(object sender, EventArgs e)
-        {
-            JogarApostar(11);
-        }
-
-        private void picCarta12_DoubleClick(object sender, EventArgs e)
-        {
-            JogarApostar(12);
-        }
-
-        private void picCoringa_DoubleClick(object sender, EventArgs e)
-        {
-            Jogo.Apostar(idJogador, senha, 0);
-            picCartaApostada.Image = Properties.Resources.istockphoto_878053066_170667a;
-
-            lblApostaValor.Text = "0";
+            tmrAutomacao.Enabled = true;
         }
     }
 }

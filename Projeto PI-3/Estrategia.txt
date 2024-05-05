@@ -1,0 +1,62 @@
+private void EstTeste(string retornoJogadas)
+        {
+            retornoJogadas = retornoJogadas.Replace("\r", "");
+            string[] jogadas = retornoJogadas.Split('\n');
+
+            //Achar as informações da última jogada
+            int size = jogadas.Length - 1;
+            string ultimaJogada = jogadas[size - 1];
+
+            string[] infos = ultimaJogada.Split(',');
+            int numRound = Convert.ToInt32(infos[0]);
+            string naipe = infos[2];
+
+            //Verificar se é o primeiro a jogar ou não
+            if (retornoJogadas == "")
+            {
+                if (numRound != 1)
+                    vitorias++;
+
+                for (int i = Cartas.Length - 1; i >= 0; i--)
+                {
+                    //Confere se a carta está disponível
+                    if (Cartas[i] == true)
+                    {
+                        int numCarta = Convert.ToInt32(JogarCarta(i + 1));
+                        Cartas[i] = false;
+
+                        break;
+                    }
+                }
+                ApostarCarta(0);
+            }
+            else
+            {
+                for (int i = 0; i < ListaNaipes.Count; i++)
+                {
+                    if (ListaNaipes[i] == naipe && Cartas[i] == true)
+                    {
+                        int numCarta = Convert.ToInt32(JogarCarta(i + 1));
+                        Cartas[i] = false;
+
+                        break;
+                    }
+
+                    //Se não tiver a carta joga a primeira mais baixa que achar disponível
+                    else if (i == ListaNaipes.Count - 1)
+                    {
+                        for (int j = 0; j < ListaNaipes.Count; j++)
+                        {
+                            if (Cartas[j] == true)
+                            {
+                                int numCarta = Convert.ToInt32(JogarCarta(i + 1));
+                                Cartas[i] = false;
+
+                                break;
+                            }
+                        }
+                    }
+                }
+                ApostarCarta(0);
+            }
+        }

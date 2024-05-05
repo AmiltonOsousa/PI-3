@@ -144,6 +144,9 @@ namespace Projeto_PI_3
             }
 
             Jogo.CriarPartida(nomePadrao, "123", "Andorra");
+
+            txtUsuario.Text = "Jogador 1";
+            txtSenha.Text = "123";
         }
     }
 }

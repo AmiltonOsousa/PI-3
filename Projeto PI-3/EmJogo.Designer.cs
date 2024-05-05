@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.label2 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.btnIniciarPartida = new System.Windows.Forms.Button();
@@ -62,6 +63,8 @@
             this.picCartaJogada = new System.Windows.Forms.PictureBox();
             this.lblApostaValor = new System.Windows.Forms.Label();
             this.lblCartaValor = new System.Windows.Forms.Label();
+            this.btnAutomacao = new System.Windows.Forms.Button();
+            this.tmrAutomacao = new System.Windows.Forms.Timer(this.components);
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picCarta11)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picCarta12)).BeginInit();
@@ -131,23 +134,21 @@
             // 
             // btnVerificarMao
             // 
-            this.btnVerificarMao.Location = new System.Drawing.Point(841, 100);
+            this.btnVerificarMao.Location = new System.Drawing.Point(841, 130);
             this.btnVerificarMao.Name = "btnVerificarMao";
             this.btnVerificarMao.Size = new System.Drawing.Size(113, 53);
             this.btnVerificarMao.TabIndex = 14;
             this.btnVerificarMao.Text = "Ver mão";
             this.btnVerificarMao.UseVisualStyleBackColor = true;
-            this.btnVerificarMao.Click += new System.EventHandler(this.btnVerificarMao_Click);
             // 
             // btnVerificarVez
             // 
-            this.btnVerificarVez.Location = new System.Drawing.Point(841, 166);
+            this.btnVerificarVez.Location = new System.Drawing.Point(841, 196);
             this.btnVerificarVez.Name = "btnVerificarVez";
             this.btnVerificarVez.Size = new System.Drawing.Size(113, 46);
             this.btnVerificarVez.TabIndex = 15;
             this.btnVerificarVez.Text = "Verificar Vez";
             this.btnVerificarVez.UseVisualStyleBackColor = true;
-            this.btnVerificarVez.Click += new System.EventHandler(this.btnVerificarVez_Click);
             // 
             // lstCartas
             // 
@@ -159,13 +160,12 @@
             // 
             // btnJogar
             // 
-            this.btnJogar.Location = new System.Drawing.Point(841, 226);
+            this.btnJogar.Location = new System.Drawing.Point(841, 256);
             this.btnJogar.Name = "btnJogar";
             this.btnJogar.Size = new System.Drawing.Size(113, 51);
             this.btnJogar.TabIndex = 17;
             this.btnJogar.Text = "Jogar";
             this.btnJogar.UseVisualStyleBackColor = true;
-            this.btnJogar.Click += new System.EventHandler(this.btnJogar_Click);
             // 
             // lblCartaJogada
             // 
@@ -199,13 +199,12 @@
             // 
             // btnApostar
             // 
-            this.btnApostar.Location = new System.Drawing.Point(841, 285);
+            this.btnApostar.Location = new System.Drawing.Point(841, 315);
             this.btnApostar.Name = "btnApostar";
             this.btnApostar.Size = new System.Drawing.Size(113, 51);
             this.btnApostar.TabIndex = 21;
             this.btnApostar.Text = "Apostar";
             this.btnApostar.UseVisualStyleBackColor = true;
-            this.btnApostar.Click += new System.EventHandler(this.btnApostar_Click);
             // 
             // panel2
             // 
@@ -246,7 +245,6 @@
             this.picCarta11.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.picCarta11.TabIndex = 11;
             this.picCarta11.TabStop = false;
-            this.picCarta11.DoubleClick += new System.EventHandler(this.picCarta11_DoubleClick);
             // 
             // picCarta12
             // 
@@ -256,7 +254,6 @@
             this.picCarta12.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.picCarta12.TabIndex = 10;
             this.picCarta12.TabStop = false;
-            this.picCarta12.DoubleClick += new System.EventHandler(this.picCarta12_DoubleClick);
             // 
             // picCarta10
             // 
@@ -266,7 +263,6 @@
             this.picCarta10.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.picCarta10.TabIndex = 9;
             this.picCarta10.TabStop = false;
-            this.picCarta10.DoubleClick += new System.EventHandler(this.picCarta10_DoubleClick);
             // 
             // picCarta5
             // 
@@ -276,7 +272,6 @@
             this.picCarta5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.picCarta5.TabIndex = 8;
             this.picCarta5.TabStop = false;
-            this.picCarta5.DoubleClick += new System.EventHandler(this.picCarta5_DoubleClick);
             // 
             // picCarta9
             // 
@@ -286,7 +281,6 @@
             this.picCarta9.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.picCarta9.TabIndex = 7;
             this.picCarta9.TabStop = false;
-            this.picCarta9.DoubleClick += new System.EventHandler(this.picCarta9_DoubleClick);
             // 
             // picCarta4
             // 
@@ -296,7 +290,6 @@
             this.picCarta4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.picCarta4.TabIndex = 6;
             this.picCarta4.TabStop = false;
-            this.picCarta4.DoubleClick += new System.EventHandler(this.picCarta4_DoubleClick);
             // 
             // picCarta8
             // 
@@ -306,7 +299,6 @@
             this.picCarta8.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.picCarta8.TabIndex = 5;
             this.picCarta8.TabStop = false;
-            this.picCarta8.DoubleClick += new System.EventHandler(this.picCarta8_DoubleClick);
             // 
             // picCarta3
             // 
@@ -316,7 +308,6 @@
             this.picCarta3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.picCarta3.TabIndex = 4;
             this.picCarta3.TabStop = false;
-            this.picCarta3.DoubleClick += new System.EventHandler(this.picCarta3_DoubleClick);
             // 
             // picCarta7
             // 
@@ -326,7 +317,6 @@
             this.picCarta7.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.picCarta7.TabIndex = 3;
             this.picCarta7.TabStop = false;
-            this.picCarta7.DoubleClick += new System.EventHandler(this.picCarta7_DoubleClick);
             // 
             // picCarta2
             // 
@@ -336,7 +326,6 @@
             this.picCarta2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.picCarta2.TabIndex = 2;
             this.picCarta2.TabStop = false;
-            this.picCarta2.DoubleClick += new System.EventHandler(this.picCarta2_DoubleClick);
             // 
             // picCarta1
             // 
@@ -346,7 +335,6 @@
             this.picCarta1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.picCarta1.TabIndex = 0;
             this.picCarta1.TabStop = false;
-            this.picCarta1.DoubleClick += new System.EventHandler(this.picCarta1_DoubleClick);
             // 
             // picCarta6
             // 
@@ -356,7 +344,6 @@
             this.picCarta6.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.picCarta6.TabIndex = 1;
             this.picCarta6.TabStop = false;
-            this.picCarta6.DoubleClick += new System.EventHandler(this.picCarta6_DoubleClick);
             // 
             // pictureBox1
             // 
@@ -384,7 +371,6 @@
             this.picCoringa.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.picCoringa.TabIndex = 12;
             this.picCoringa.TabStop = false;
-            this.picCoringa.DoubleClick += new System.EventHandler(this.picCoringa_DoubleClick);
             // 
             // picCartaApostada
             // 
@@ -424,18 +410,34 @@
             this.lblCartaValor.AutoSize = true;
             this.lblCartaValor.BackColor = System.Drawing.Color.Transparent;
             this.lblCartaValor.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCartaValor.Location = new System.Drawing.Point(433, 310);
+            this.lblCartaValor.Location = new System.Drawing.Point(432, 310);
             this.lblCartaValor.Name = "lblCartaValor";
             this.lblCartaValor.Size = new System.Drawing.Size(20, 20);
             this.lblCartaValor.TabIndex = 27;
             this.lblCartaValor.Text = "C";
             this.lblCartaValor.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // btnAutomacao
+            // 
+            this.btnAutomacao.Location = new System.Drawing.Point(840, 36);
+            this.btnAutomacao.Name = "btnAutomacao";
+            this.btnAutomacao.Size = new System.Drawing.Size(114, 55);
+            this.btnAutomacao.TabIndex = 29;
+            this.btnAutomacao.Text = "Automação";
+            this.btnAutomacao.UseVisualStyleBackColor = true;
+            this.btnAutomacao.Click += new System.EventHandler(this.btnAutomacao_Click);
+            // 
+            // tmrAutomacao
+            // 
+            this.tmrAutomacao.Interval = 5000;
+            this.tmrAutomacao.Tick += new System.EventHandler(this.tmrAutomacao_Tick);
+            // 
             // EmJogo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1110, 718);
+            this.Controls.Add(this.btnAutomacao);
             this.Controls.Add(this.lblApostaValor);
             this.Controls.Add(this.picCoringa);
             this.Controls.Add(this.lblCartaValor);
@@ -518,5 +520,7 @@
         private System.Windows.Forms.Label lblApostaValor;
         private System.Windows.Forms.Label lblCartaValor;
         private System.Windows.Forms.Label lblCarta1;
+        private System.Windows.Forms.Button btnAutomacao;
+        private System.Windows.Forms.Timer tmrAutomacao;
     }
 }
