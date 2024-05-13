@@ -429,7 +429,7 @@
             // 
             // tmrAutomacao
             // 
-            this.tmrAutomacao.Interval = 5000;
+            this.tmrAutomacao.Interval = 2000;
             this.tmrAutomacao.Tick += new System.EventHandler(this.tmrAutomacao_Tick);
             // 
             // EmJogo

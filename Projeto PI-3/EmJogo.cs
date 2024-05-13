@@ -17,7 +17,7 @@ namespace Projeto_PI_3
     {
         //Variáveis para pegar dado de outro form
         public string dadosRetorno { get; set; }
-        public string dadoOriginal, status, dados, senha;
+        public string dadoOriginal, status, dados, senha, naipe;
         public string[] dado, minhasCartas;
 
         public int idJogador, idPartida;
@@ -40,6 +40,7 @@ namespace Projeto_PI_3
         public bool apostaEncontrada = false;
         public bool acumularPontos = true;
         public bool apostou = false;
+        public bool fimPartida = false;
 
 
         public void AtualizarTela()
@@ -208,14 +209,14 @@ namespace Projeto_PI_3
         {
             string retorno = Jogo.Jogar(idJogador, senha, posicao);
 
-            if (retorno.Substring(0, 1) == "E")
+            /*if (retorno.Substring(0, 1) == "E")
             {
                 MessageBox.Show("Ocorreu um erro:\n" + retorno.Substring(5), "Meu PI-3", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return "";
             }
+            */
 
-            else
-            {
+            
                 lblTitulo.Text = "Carta jogada | Esperando a aposta...";
                 lblCartaJogada.Text = "Carta Jogada: " + retorno;
 
@@ -228,20 +229,20 @@ namespace Projeto_PI_3
                 MudarDesignCarta(posicao);
 
                 return retorno;
-            }
+            
         }
 
         public void ApostarCarta(int posicao)
         {
             string retorno = Jogo.Apostar(idJogador, senha, posicao);
 
-            if (retorno.Substring(0, 1) == "E")
+            /*if (retorno.Substring(0, 1) == "E")
             {
                 MessageBox.Show("Ocorreu um erro:\n" + retorno.Substring(5), "Meu PI-3", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
+            */
 
-            else
-            {
+            
                 lblAposta.Text = "Aposta feita: " + retorno;
                 lblTitulo.Text = "Carta jogada | Aposta feita";
                 lblApostaValor.Text = retorno;
@@ -256,24 +257,55 @@ namespace Projeto_PI_3
                     picCartaApostada.Image = CartasImagens[posicao - 1].Image;
                 }
                 cartaJogada = false;
-            }
+            
         }
 
         //----------------------Métodos Auxiliares---------------------\\
 
         private void AlgAposta(int numCarta, int vitoria, int posicao)
         {
+            if (apostou)
+            {
+                ApostarCarta(0);
+                return;
+            }
+
+            if(numRound == 10)
+            {
+                //Apostar a carta mais próxima da quantidade de vitórias
+                for (int i = 0; i < Cartas.Length; i++)
+                {
+                    if (Cartas[i] == true)
+                    {
+                        ApostarCarta(i + 1);
+                        Cartas[i] = false;
+
+                        return;
+                    }
+                } 
+            }
+
             if(numRound >= 5)
             {
                 if(numCarta - vitoria == 0)
                 {
-                    if (Cartas[posicao + 1] == true)
+                    //remover os extremos, pois a primeira carta -1 ou a última mais 1 não existe
+                    if (posicao != 11 && posicao != 0)
                     {
-                        ApostarCarta(posicao + 2);
-                    }
-                    else if (Cartas[posicao + 1] == true)
-                    {
-                        ApostarCarta(posicao);
+                        if (Cartas[posicao + 1] == true)
+                        {
+                            ApostarCarta(posicao + 2);
+                            apostou = true;
+
+                            Cartas[posicao + 1] = false;
+                        }
+                        else if (Cartas[posicao + 1] == true)
+                        {
+                            ApostarCarta(posicao);
+                            apostou = true;
+
+                            Cartas[posicao + 1] = false;
+                        }
                     }
                 }
             }
@@ -286,12 +318,23 @@ namespace Projeto_PI_3
             {
                 if (ListaNaipes[i] == naipe && Cartas[i] == true)
                 {
-                    int numCarta = Convert.ToInt32(JogarCarta(i + 1));
+                    numCarta = Convert.ToInt32(JogarCarta(i + 1));
                     Cartas[i] = false;
 
-                    break;
+                    return;
                 }
+            }
 
+            //Caso não tenha nenhuma carta com o naipe
+            for (int j = ListaNaipes.Count - 1; j >= 0; j--)
+            {
+                if (Cartas[j] == true)
+                {
+                    numCarta = Convert.ToInt32(JogarCarta(j + 1));
+                    Cartas[j] = false;
+
+                    return;
+                }
             }
         }
 
@@ -299,10 +342,24 @@ namespace Projeto_PI_3
 
         private void EstTeste(string retornoJogadas)
         {
-            //Verificar se é o primeiro a jogar ou não
-            if (retornoJogadas == "")
+            retornoJogadas = retornoJogadas.Replace("\r", "");
+            string[] jogadas = retornoJogadas.Split('\n');
+
+            if(retornoJogadas != "")
             {
-                if (numRound > 1)
+                //Achar as informações da última jogada
+                int size = jogadas.Length - 1;
+                string ultimaJogada = jogadas[size - 1];
+                    
+                string[] infos = ultimaJogada.Split(',');
+                numRound = Convert.ToInt32(infos[0]);
+                naipe = infos[2];
+            }
+
+            //Verificar se é o primeiro a jogar ou não - OBS: Se é o primeiro logo ele ganhou a rodada anterior, com excessão da primeira rodada que é aleatório quem começa
+            if (retornoJogadas == "" || (jogadas.Length - 1) % 2 == 0)
+            {
+                if (numRound > 0)
                     vitorias++;
 
                 for (int i = Cartas.Length - 1; i >= 0; i--)
@@ -314,109 +371,50 @@ namespace Projeto_PI_3
                         Cartas[i] = false;
                         posicao = i;
 
+                        AlgAposta(numCarta, vitorias, posicao);
+
                         break;
                     }
                 }
-
-                AlgAposta(numCarta, vitorias, posicao);
             }
             else
             {
-                retornoJogadas = retornoJogadas.Replace("\r", "");
-                string[] jogadas = retornoJogadas.Split('\n');
-
-                //Achar as informações da última jogada
-                int size = jogadas.Length - 1;
-                string ultimaJogada = jogadas[size - 1];
-
-                string[] infos = ultimaJogada.Split(',');
-                numRound = Convert.ToInt32(infos[0]);
-                string naipe = infos[2];
-
                 if (vitorias < 3)
                 {
                     MaiorCarta(naipe);
+                    AlgAposta(numCarta, vitorias, posicao);
+
+                    return;
                 }
-                else
+
+                for (int i = 0; i < ListaNaipes.Count; i++)
                 {
-                    for (int i = 0; i < ListaNaipes.Count; i++)
+                    if (ListaNaipes[i] == naipe && Cartas[i] == true)
                     {
-                        
-                       if (ListaNaipes[i] == naipe && Cartas[i] == true)
-                       {
-                           int numCarta = Convert.ToInt32(JogarCarta(i + 1));
-                           Cartas[i] = false;
-                       
-                           break;
-                       }
-                        
-                    }
-                }
-                ApostarCarta(0);
-            }
-        }
-
-
-
-        /*
-        private void Estrategia(string retornoJogadas)
-        {
-        
-            if(retornoJogadas == "" && acumularPontos)
-            {
-                vitorias++;
-
-                for (int i = Cartas.Length - 1; i >= 0; i--)
-                {
-                    //Confere se a carta está disponível
-                    if (Cartas[i] == true)
-                    {
-                        int valorCarta = Convert.ToInt32(JogarCarta(i + 1));
-                        valoresMao[i] = valorCarta;
+                        numCarta = Convert.ToInt32(JogarCarta(i + 1));
                         Cartas[i] = false;
 
-                        break;
+                        AlgAposta(numCarta, vitorias, posicao);
+
+                        return;
                     }
                 }
 
-                ApostarCarta(0);
-            }
-            else
-            {
-                acumularPontos = false;
-
-                for (int i = 0; i < Cartas.Length; i++)
+                //Excessão: Não tem a carta com o naipe correspondente
+                for (int j = 0; j < ListaNaipes.Count; j++)
                 {
-                    //Confere se a carta está disponível
-                    if (Cartas[i] == true)
+                    if (Cartas[j] == true)
                     {
-                        int valorCarta = Convert.ToInt32(JogarCarta(i + 1));
-                        valoresMao[i] = valorCarta;
-                        Cartas[i] = false;
+                        int numCarta = Convert.ToInt32(JogarCarta(j + 1));
+                        Cartas[j] = false;
 
-                        if(valorCarta == vitorias && !apostou)
-                        {
-                            if (Cartas[i] == true)
-                            {
-                                ApostarCarta(i);
-                            }
-                            else if (Cartas[i + 2] == true)
-                            {
-                                ApostarCarta(i + 2);
-                            }
-                        }
-                        else
-                        {
-                            ApostarCarta(0);
-                        }
+                        AlgAposta(numCarta, vitorias, posicao);
 
-                        break;
+                        return;
                     }
-                }
+                }                      
             }
         }
-        */
-
 
         //--------------------------------------------------------------\\
 
