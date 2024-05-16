@@ -61,6 +61,7 @@
     <Compile Include="EmJogo.Designer.cs">
       <DependentUpon>EmJogo.cs</DependentUpon>
     </Compile>
+    <Content Include="estrategiaRandom.txt" />
     <Compile Include="ListarPartida.cs">
       <SubType>Form</SubType>
     </Compile>

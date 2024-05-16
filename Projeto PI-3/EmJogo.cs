@@ -111,6 +111,8 @@ namespace Projeto_PI_3
 
         public void VerMao()
         {
+            ListaNaipes.Clear();
+
             string retorno = Jogo.ConsultarMao(idPartida);
 
             retorno = retorno.Replace("\r", "");
@@ -209,14 +211,13 @@ namespace Projeto_PI_3
         {
             string retorno = Jogo.Jogar(idJogador, senha, posicao);
 
-            /*if (retorno.Substring(0, 1) == "E")
+            if (retorno.Substring(0, 1) == "E")
             {
                 MessageBox.Show("Ocorreu um erro:\n" + retorno.Substring(5), "Meu PI-3", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return "";
             }
-            */
-
-            
+            else
+            {
                 lblTitulo.Text = "Carta jogada | Esperando a aposta...";
                 lblCartaJogada.Text = "Carta Jogada: " + retorno;
 
@@ -229,20 +230,19 @@ namespace Projeto_PI_3
                 MudarDesignCarta(posicao);
 
                 return retorno;
-            
+            }
         }
 
         public void ApostarCarta(int posicao)
         {
             string retorno = Jogo.Apostar(idJogador, senha, posicao);
 
-            /*if (retorno.Substring(0, 1) == "E")
+            if (retorno.Substring(0, 1) == "E")
             {
                 MessageBox.Show("Ocorreu um erro:\n" + retorno.Substring(5), "Meu PI-3", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
-            */
-
-            
+            else
+            {
                 lblAposta.Text = "Aposta feita: " + retorno;
                 lblTitulo.Text = "Carta jogada | Aposta feita";
                 lblApostaValor.Text = retorno;
@@ -257,10 +257,21 @@ namespace Projeto_PI_3
                     picCartaApostada.Image = CartasImagens[posicao - 1].Image;
                 }
                 cartaJogada = false;
-            
+            }
         }
 
         //----------------------Métodos Auxiliares---------------------\\
+
+        private void proximoRound()
+        {
+            VerMao();
+            vitorias = 0;
+
+            for (int i = 0; i < Cartas.Length; i++)
+            {
+                Cartas[i] = true;
+            }
+        }
 
         private void AlgAposta(int numCarta, int vitoria, int posicao)
         {
@@ -270,7 +281,7 @@ namespace Projeto_PI_3
                 return;
             }
 
-            if(numRound == 10)
+            if(numRound == 11)
             {
                 //Apostar a carta mais próxima da quantidade de vitórias
                 for (int i = 0; i < Cartas.Length; i++)
@@ -282,7 +293,7 @@ namespace Projeto_PI_3
 
                         return;
                     }
-                } 
+                }
             }
 
             if(numRound >= 5)
@@ -352,28 +363,61 @@ namespace Projeto_PI_3
                 string ultimaJogada = jogadas[size - 1];
                     
                 string[] infos = ultimaJogada.Split(',');
-                numRound = Convert.ToInt32(infos[0]);
+
+                if (retornoJogadas == "" || (jogadas.Length - 1) % 2 == 0)
+                {
+                    numRound = Convert.ToInt32(infos[0]) + 1;
+                    label3.Text = numRound.ToString();
+                }
+                else
+                {
+                    numRound = Convert.ToInt32(infos[0]);
+                    label3.Text = numRound.ToString();
+                }
+
                 naipe = infos[2];
             }
 
             //Verificar se é o primeiro a jogar ou não - OBS: Se é o primeiro logo ele ganhou a rodada anterior, com excessão da primeira rodada que é aleatório quem começa
             if (retornoJogadas == "" || (jogadas.Length - 1) % 2 == 0)
             {
-                if (numRound > 0)
-                    vitorias++;
-
-                for (int i = Cartas.Length - 1; i >= 0; i--)
+                if (numRound > 0 && numRound < 11)
                 {
-                    //Confere se a carta está disponível
-                    if (Cartas[i] == true)
+                    vitorias++;
+                }
+
+                if (vitorias < 3)
+                {
+                    for (int i = Cartas.Length - 1; i >= 0; i--)
                     {
-                        numCarta = Convert.ToInt32(JogarCarta(i + 1));
-                        Cartas[i] = false;
-                        posicao = i;
+                        //Confere se a carta está disponível
+                        if (Cartas[i] == true)
+                        {
+                            numCarta = Convert.ToInt32(JogarCarta(i + 1));
+                            Cartas[i] = false;
+                            posicao = i;
 
-                        AlgAposta(numCarta, vitorias, posicao);
+                            AlgAposta(numCarta, vitorias, posicao);
 
-                        break;
+                            return;
+                        }
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < Cartas.Length; i++)
+                    {
+                        //Confere se a carta está disponível
+                        if (Cartas[i] == true)
+                        {
+                            numCarta = Convert.ToInt32(JogarCarta(i + 1));
+                            Cartas[i] = false;
+                            posicao = i;
+
+                            AlgAposta(numCarta, vitorias, posicao);
+
+                            return;
+                        }
                     }
                 }
             }
@@ -436,6 +480,9 @@ namespace Projeto_PI_3
 
             if (seuTurno)
             {
+                if (numRound == 11)
+                    proximoRound();
+
                 EstTeste(retornoJogadas);
             }
 

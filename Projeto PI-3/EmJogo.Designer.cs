@@ -65,6 +65,7 @@
             this.lblCartaValor = new System.Windows.Forms.Label();
             this.btnAutomacao = new System.Windows.Forms.Button();
             this.tmrAutomacao = new System.Windows.Forms.Timer(this.components);
+            this.label3 = new System.Windows.Forms.Label();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picCarta11)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picCarta12)).BeginInit();
@@ -432,11 +433,21 @@
             this.tmrAutomacao.Interval = 2000;
             this.tmrAutomacao.Tick += new System.EventHandler(this.tmrAutomacao_Tick);
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(213, 169);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(35, 13);
+            this.label3.TabIndex = 30;
+            this.label3.Text = "label3";
+            // 
             // EmJogo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1110, 718);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.btnAutomacao);
             this.Controls.Add(this.lblApostaValor);
             this.Controls.Add(this.picCoringa);
@@ -522,5 +533,6 @@
         private System.Windows.Forms.Label lblCarta1;
         private System.Windows.Forms.Button btnAutomacao;
         private System.Windows.Forms.Timer tmrAutomacao;
+        private System.Windows.Forms.Label label3;
     }
 }

@@ -1,23 +1,34 @@
-        private void EstTeste(string retornoJogadas)
+ private void EstTeste(string retornoJogadas)
         {
             retornoJogadas = retornoJogadas.Replace("\r", "");
             string[] jogadas = retornoJogadas.Split('\n');
 
             if(retornoJogadas != "")
             {
+                label3.Text = retornoJogadas;
                 //Achar as informações da última jogada
                 int size = jogadas.Length - 1;
                 string ultimaJogada = jogadas[size - 1];
-
+                    
                 string[] infos = ultimaJogada.Split(',');
-                numRound = Convert.ToInt32(infos[0]);
+
+                if (retornoJogadas == "" || (jogadas.Length - 1) % 2 == 0)
+                {
+                    numRound = Convert.ToInt32(infos[0]) + 1;
+                }
+                else
+                {
+                    numRound = Convert.ToInt32(infos[0]);
+                }
+
+                label3.Text += " " + numRound.ToString();
                 naipe = infos[2];
             }
 
             //Verificar se é o primeiro a jogar ou não - OBS: Se é o primeiro logo ele ganhou a rodada anterior, com excessão da primeira rodada que é aleatório quem começa
             if (retornoJogadas == "" || (jogadas.Length - 1) % 2 == 0)
             {
-                if (numRound > 1)
+                if (numRound > 0)
                     vitorias++;
 
                 for (int i = Cartas.Length - 1; i >= 0; i--)
@@ -29,46 +40,47 @@
                         Cartas[i] = false;
                         posicao = i;
 
+                        AlgAposta(numCarta, vitorias, posicao);
+
                         break;
                     }
                 }
-
-                AlgAposta(numCarta, vitorias, posicao);
             }
             else
             {
                 if (vitorias < 3)
                 {
                     MaiorCarta(naipe);
+                    AlgAposta(numCarta, vitorias, posicao);
+
+                    return;
                 }
-                else
+
+                for (int i = 0; i < ListaNaipes.Count; i++)
                 {
-                    for (int i = 0; i < ListaNaipes.Count; i++)
+                    if (ListaNaipes[i] == naipe && Cartas[i] == true)
                     {
+                        numCarta = Convert.ToInt32(JogarCarta(i + 1));
+                        Cartas[i] = false;
 
-                        if (ListaNaipes[i] == naipe && Cartas[i] == true)
-                        {
-                            int numCarta = Convert.ToInt32(JogarCarta(i + 1));
-                            Cartas[i] = false;
+                        AlgAposta(numCarta, vitorias, posicao);
 
-                            break;
-                        }
-                        //Excessão: Não tem a carta com o naipe correspondente
-                        else
-                        {
-                            for (int j = 0; j < ListaNaipes.Count; j++)
-                            {
-                                if (Cartas[j] == true)
-                                {
-                                    int numCarta = Convert.ToInt32(JogarCarta(j + 1));
-                                    Cartas[i] = false;
-
-                                    break;
-                                }
-                            }
-                        }
+                        return;
                     }
                 }
-                ApostarCarta(0);
+
+                //Excessão: Não tem a carta com o naipe correspondente
+                for (int j = 0; j < ListaNaipes.Count; j++)
+                {
+                    if (Cartas[j] == true)
+                    {
+                        int numCarta = Convert.ToInt32(JogarCarta(j + 1));
+                        Cartas[j] = false;
+
+                        AlgAposta(numCarta, vitorias, posicao);
+
+                        return;
+                    }
+                }                      
             }
         }

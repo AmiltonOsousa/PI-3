@@ -92,7 +92,6 @@ namespace Projeto_PI_3
                 this.Close();
             }
         }
-        
 
         private void btnEntrarPartida_Click(object sender, EventArgs e)
         {
